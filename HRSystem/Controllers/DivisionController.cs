@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,15 +14,14 @@ namespace HRSystem.Controllers
         {
             _context = context;
         }
-
-        // GET: Division
+        
         public async Task<IActionResult> Index()
         {
             var hrSystem = _context.Divisions.Include(d => d.Parent);
+            
             return View(await hrSystem.ToListAsync());
         }
-
-        // GET: Division/Details/5
+        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,6 +32,7 @@ namespace HRSystem.Controllers
             var division = await _context.Divisions
                 .Include(d => d.Parent)
                 .FirstOrDefaultAsync(m => m.DivisionId == id);
+            
             if (division == null)
             {
                 return NotFound();
@@ -43,18 +40,15 @@ namespace HRSystem.Controllers
 
             return View(division);
         }
-
-        // GET: Division/Create
+        
         public IActionResult Create()
         {
-            ViewData["ParentId"] = new SelectList(_context.Divisions, "DivisionId", "Name", null);
+            ViewData["ParentId"] = new SelectList(_context.Divisions, "DivisionId", "Name");
             
             return View();
         }
-
-
+        
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DivisionId,Name,ParentId")] Division division)
         {
             if (ModelState.IsValid)
@@ -67,8 +61,7 @@ namespace HRSystem.Controllers
             
             return View(division);
         }
-
-        // GET: Division/Edit/5
+        
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,14 +74,13 @@ namespace HRSystem.Controllers
             {
                 return NotFound();
             }
-            ViewData["DivisionId"] = new SelectList(_context.Divisions, "DivisionId", "Name", division.DivisionId);
+            ViewData["ParentId"] = new SelectList(_context.Divisions, "DivisionId", "Name", division.ParentId);
             
             return View(division);
         }
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("DivisionId,Name,ParentId")] Division division)
         {
             if (id != division.DivisionId)
@@ -98,30 +90,17 @@ namespace HRSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(division);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DivisionExists(division.DivisionId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _context.Update(division);
+                await _context.SaveChangesAsync();
+                
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DivisionId"] = new SelectList(_context.Divisions, "DivisionId", "Name", division.DivisionId);
+            ViewData["ParentId"] = new SelectList(_context.Divisions, "DivisionId", "Name", division.ParentId);
             
             return View(division);
         }
-
-        // GET: Division/Delete/5
+        
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -132,6 +111,7 @@ namespace HRSystem.Controllers
             var division = await _context.Divisions
                 .Include(d => d.Parent)
                 .FirstOrDefaultAsync(m => m.DivisionId == id);
+            
             if (division == null)
             {
                 return NotFound();
@@ -139,22 +119,16 @@ namespace HRSystem.Controllers
 
             return View(division);
         }
-
-        // POST: Division/Delete/5
+        
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var division = await _context.Divisions.FindAsync(id);
+            
             _context.Divisions.Remove(division);
             await _context.SaveChangesAsync();
             
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool DivisionExists(int id)
-        {
-            return _context.Divisions.Any(e => e.DivisionId == id);
         }
     }
 }

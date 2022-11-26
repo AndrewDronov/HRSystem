@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
@@ -26,7 +24,7 @@ namespace HRSystem.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "Cyrillic_General_CI_AS");
 
             modelBuilder.Entity<Division>(entity =>
             {
@@ -37,7 +35,6 @@ namespace HRSystem.Models
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(100)
-                    .IsUnicode(false)
                     .HasColumnName("name");
 
                 entity.Property(e => e.ParentId).HasColumnName("parent_id");
@@ -59,18 +56,15 @@ namespace HRSystem.Models
                 entity.Property(e => e.FirstName)
                     .IsRequired()
                     .HasMaxLength(100)
-                    .IsUnicode(false)
                     .HasColumnName("first_name");
 
                 entity.Property(e => e.LastName)
                     .IsRequired()
                     .HasMaxLength(100)
-                    .IsUnicode(false)
                     .HasColumnName("last_name");
 
                 entity.Property(e => e.MiddleName)
                     .HasMaxLength(100)
-                    .IsUnicode(false)
                     .HasColumnName("middle_name");
 
                 entity.HasOne(d => d.Division)
