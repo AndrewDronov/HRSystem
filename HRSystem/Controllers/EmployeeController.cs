@@ -15,12 +15,14 @@ namespace HRSystem.Controllers
             _context = context;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var hrSystem = _context.Employees.Include(e => e.Division);
             return View(await hrSystem.ToListAsync());
         }
         
+        [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -39,6 +41,7 @@ namespace HRSystem.Controllers
             return View(employee);
         }
         
+        [HttpGet]
         public IActionResult Create()
         {
             ViewData["DivisionId"] = new SelectList(_context.Divisions, "DivisionId", "Name", null);
@@ -46,7 +49,7 @@ namespace HRSystem.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("EmployeeId,FirstName,MiddleName,LastName,DivisionId")] Employee employee)
+        public async Task<IActionResult> Create([FromForm] Employee employee)
         {
             if (ModelState.IsValid)
             {
@@ -59,6 +62,7 @@ namespace HRSystem.Controllers
             return View(employee);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,7 +82,7 @@ namespace HRSystem.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,FirstName,MiddleName,LastName,DivisionId")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [FromForm] Employee employee)
         {
             if (id != employee.EmployeeId)
             {
@@ -108,6 +112,7 @@ namespace HRSystem.Controllers
             var employee = await _context.Employees
                 .Include(e => e.Division)
                 .FirstOrDefaultAsync(m => m.EmployeeId == id);
+            
             if (employee == null)
             {
                 return NotFound();

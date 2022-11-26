@@ -14,20 +14,4 @@
       <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     </ItemGroup>
 
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="Views\Division\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Division\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Division\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Division\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Division\Index.cshtml" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Division\Create.cshtml" />
-      <UpToDateCheckInput Remove="Views\Division\Delete.cshtml" />
-      <UpToDateCheckInput Remove="Views\Division\Details.cshtml" />
-      <UpToDateCheckInput Remove="Views\Division\Edit.cshtml" />
-      <UpToDateCheckInput Remove="Views\Division\Index.cshtml" />
-    </ItemGroup>
-
 </Project>

@@ -15,6 +15,7 @@ namespace HRSystem.Controllers
             _context = context;
         }
         
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var hrSystem = _context.Divisions.Include(d => d.Parent);
@@ -22,6 +23,7 @@ namespace HRSystem.Controllers
             return View(await hrSystem.ToListAsync());
         }
         
+        [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -41,6 +43,7 @@ namespace HRSystem.Controllers
             return View(division);
         }
         
+        [HttpGet]
         public IActionResult Create()
         {
             ViewData["ParentId"] = new SelectList(_context.Divisions, "DivisionId", "Name");
@@ -49,7 +52,7 @@ namespace HRSystem.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("DivisionId,Name,ParentId")] Division division)
+        public async Task<IActionResult> Create([FromForm] Division division)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +65,7 @@ namespace HRSystem.Controllers
             return View(division);
         }
         
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,7 +85,7 @@ namespace HRSystem.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, [Bind("DivisionId,Name,ParentId")] Division division)
+        public async Task<IActionResult> Edit(int id, [FromForm] Division division)
         {
             if (id != division.DivisionId)
             {
