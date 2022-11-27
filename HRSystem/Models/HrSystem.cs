@@ -17,6 +17,7 @@ namespace HRSystem.Models
 
         public virtual DbSet<Division> Divisions { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
+        public virtual DbSet<TransferHistory> TransferHistories { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -72,6 +73,41 @@ namespace HRSystem.Models
                     .HasForeignKey(d => d.DivisionId)
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("employee_FK");
+            });
+            
+            modelBuilder.Entity<TransferHistory>(entity =>
+            {
+                entity.ToTable("transfer_history");
+                
+                entity.Property(e => e.TransferId).HasColumnName("transfer_id");
+
+                entity.Property(e => e.EmployeeId)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnName("employee_id");
+
+                entity.Property(e => e.DivisionId)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnName("division_id");
+                
+                entity.Property(e => e.CreatedAt)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnName("created_at");
+                
+                entity.HasOne(d => d.Employee)
+                    .WithMany()
+                    .HasForeignKey(d => d.EmployeeId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("transfer_history_FK_1");
+                
+                
+                entity.HasOne(d => d.Division)
+                    .WithMany()
+                    .HasForeignKey(d => d.DivisionId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("transfer_history_FK");
             });
 
             OnModelCreatingPartial(modelBuilder);

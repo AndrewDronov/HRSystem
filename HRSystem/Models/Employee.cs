@@ -4,7 +4,7 @@
 
 namespace HRSystem.Models
 {
-    public partial class Employee
+    public class Employee
     {
         public int EmployeeId { get; set; }
         [DisplayName("Имя")]

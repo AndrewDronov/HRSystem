@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace HRSystem.Models
 {
-    public partial class Division
+    public class Division
     {
         public Division()
         {

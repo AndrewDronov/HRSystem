@@ -1,0 +1,71 @@
+@model HRSystem.ViewModels.TransferHistoryViewModel
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Index">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Filter.EmployeeId" class="control-label"></label>
+                <input asp-for="Filter.EmployeeId" class="form-control" />
+                <span asp-validation-for="Filter.EmployeeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Filter.DivisionId" class="control-label"></label>
+                <input asp-for="Filter.DivisionId" class="form-control" />
+                <span asp-validation-for="Filter.DivisionId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Filter.DateFrom" class="control-label"></label>
+                <input asp-for="Filter.DateFrom" class="form-control" />
+                <span asp-validation-for="Filter.DateFrom" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Filter.DateTo" class="control-label"></label>
+                <input asp-for="Filter.DateTo" class="form-control" />
+                <span asp-validation-for="Filter.DateTo" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Найти" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameForInnerType((TransferHistory p) => p.EmployeeId)
+            </th>
+            <th>
+                @Html.DisplayNameForInnerType((TransferHistory p) => p.DivisionId)
+            </th>
+            <th>
+                @Html.DisplayNameForInnerType((TransferHistory p) => p.CreatedAt)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    
+
+    
+    @foreach (var item in Model.Data)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DivisionId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedAt)
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
