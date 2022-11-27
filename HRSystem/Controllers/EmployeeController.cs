@@ -1,25 +1,26 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using HRSystem.Models;
+using HRSystem.Services.Interfaces;
 
 namespace HRSystem.Controllers
 {
     public class EmployeeController : Controller
     {
-        private readonly HrSystem _context;
+        private readonly IEmployeeService _employeeService;
+        private readonly IDivisionService _divisionService;
 
-        public EmployeeController(HrSystem context)
+        public EmployeeController(IEmployeeService employeeService, IDivisionService divisionService)
         {
-            _context = context;
+            _employeeService = employeeService;
+            _divisionService = divisionService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var hrSystem = _context.Employees.Include(e => e.Division);
-            return View(await hrSystem.ToListAsync());
+            return View(await _employeeService.GetListAsync());
         }
         
         [HttpGet]
@@ -30,9 +31,8 @@ namespace HRSystem.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees
-                .Include(e => e.Division)
-                .FirstOrDefaultAsync(m => m.EmployeeId == id);
+            var employee = await _employeeService.GetByIdAsync(id.Value);
+            
             if (employee == null)
             {
                 return NotFound();
@@ -42,9 +42,9 @@ namespace HRSystem.Controllers
         }
         
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["DivisionId"] = new SelectList(_context.Divisions, "DivisionId", "Name", null);
+            ViewData["DivisionId"] = new SelectList(await _divisionService.GetListAsync(), "DivisionId", "Name", null);
             return View();
         }
 
@@ -53,11 +53,10 @@ namespace HRSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(employee);
-                await _context.SaveChangesAsync();
+                await _employeeService.CreateAsync(employee);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DivisionId"] = new SelectList(_context.Divisions, "DivisionId", "Name", null);
+            ViewData["DivisionId"] = new SelectList(await _divisionService.GetListAsync(), "DivisionId", "Name", null);
             
             return View(employee);
         }
@@ -70,12 +69,13 @@ namespace HRSystem.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees.FindAsync(id);
+            var employee = await _employeeService.GetByIdAsync(id.Value);
+            
             if (employee == null)
             {
                 return NotFound();
             }
-            ViewData["DivisionId"] = new SelectList(_context.Divisions, "DivisionId", "Name", employee.DivisionId);
+            ViewData["DivisionId"] = new SelectList(await _divisionService.GetListAsync(), "DivisionId", "Name", employee.DivisionId);
             
             return View(employee);
         }
@@ -91,13 +91,11 @@ namespace HRSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Update(employee);
-
-                await _context.SaveChangesAsync();
+               await _employeeService.UpdateAsync(employee);
                 
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DivisionId"] = new SelectList(_context.Divisions, "DivisionId", "Name", employee.DivisionId);
+            ViewData["DivisionId"] = new SelectList(await _divisionService.GetListAsync(), "DivisionId", "Name", employee.DivisionId);
             
             return View(employee);
         }
@@ -110,9 +108,7 @@ namespace HRSystem.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees
-                .Include(e => e.Division)
-                .FirstOrDefaultAsync(m => m.EmployeeId == id);
+            var employee = await _employeeService.GetByIdAsync(id.Value);
             
             if (employee == null)
             {
@@ -125,9 +121,8 @@ namespace HRSystem.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var employee = await _context.Employees.FindAsync(id);
-            _context.Employees.Remove(employee);
-            await _context.SaveChangesAsync();
+
+            await _employeeService.DeleteAsync(id);
             
             return RedirectToAction(nameof(Index));
         }

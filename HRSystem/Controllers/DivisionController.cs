@@ -1,28 +1,26 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using HRSystem.Models;
+using HRSystem.Services.Interfaces;
 
 namespace HRSystem.Controllers
 {
     public class DivisionController : Controller
     {
-        private readonly HrSystem _context;
+        private readonly IDivisionService _divisionService;
 
-        public DivisionController(HrSystem context)
+        public DivisionController(IDivisionService divisionService)
         {
-            _context = context;
+            _divisionService = divisionService;
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var hrSystem = _context.Divisions.Include(d => d.Parent);
-            
-            return View(await hrSystem.ToListAsync());
+            return View(await _divisionService.GetListAsync());
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
@@ -31,10 +29,8 @@ namespace HRSystem.Controllers
                 return NotFound();
             }
 
-            var division = await _context.Divisions
-                .Include(d => d.Parent)
-                .FirstOrDefaultAsync(m => m.DivisionId == id);
-            
+            var division = await _divisionService.GetByIdAsync(id.Value);
+
             if (division == null)
             {
                 return NotFound();
@@ -42,29 +38,29 @@ namespace HRSystem.Controllers
 
             return View(division);
         }
-        
+
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["ParentId"] = new SelectList(_context.Divisions, "DivisionId", "Name");
-            
+            ViewData["ParentId"] = new SelectList(await _divisionService.GetListAsync(), "DivisionId", "Name");
+
             return View();
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] Division division)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(division);
-                await _context.SaveChangesAsync();
+                await _divisionService.CreateAsync(division);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ParentId"] = new SelectList(_context.Divisions, "DivisionId", "Name", null);
-            
+
+            ViewData["ParentId"] = new SelectList(await _divisionService.GetListAsync(), "DivisionId", "Name", null);
+
             return View(division);
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -73,13 +69,16 @@ namespace HRSystem.Controllers
                 return NotFound();
             }
 
-            var division = await _context.Divisions.FindAsync(id);
+            var division = await _divisionService.GetByIdAsync(id.Value);
+
             if (division == null)
             {
                 return NotFound();
             }
-            ViewData["ParentId"] = new SelectList(_context.Divisions, "DivisionId", "Name", division.ParentId);
-            
+
+            ViewData["ParentId"] = new SelectList(await _divisionService.GetListAsync(), "DivisionId", "Name",
+                division.ParentId);
+
             return View(division);
         }
 
@@ -94,16 +93,17 @@ namespace HRSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Update(division);
-                await _context.SaveChangesAsync();
-                
+                await _divisionService.UpdateAsync(division);
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ParentId"] = new SelectList(_context.Divisions, "DivisionId", "Name", division.ParentId);
-            
+
+            ViewData["ParentId"] = new SelectList(await _divisionService.GetListAsync(), "DivisionId", "Name",
+                division.ParentId);
+
             return View(division);
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -112,10 +112,8 @@ namespace HRSystem.Controllers
                 return NotFound();
             }
 
-            var division = await _context.Divisions
-                .Include(d => d.Parent)
-                .FirstOrDefaultAsync(m => m.DivisionId == id);
-            
+            var division = await _divisionService.GetByIdAsync(id.Value);
+
             if (division == null)
             {
                 return NotFound();
@@ -123,15 +121,12 @@ namespace HRSystem.Controllers
 
             return View(division);
         }
-        
+
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var division = await _context.Divisions.FindAsync(id);
-            
-            _context.Divisions.Remove(division);
-            await _context.SaveChangesAsync();
-            
+            await _divisionService.DeleteAsync(id);
+
             return RedirectToAction(nameof(Index));
         }
     }

@@ -29,6 +29,8 @@ namespace HRSystem
                 options.UseSqlServer(Configuration.GetConnectionString("HrSystem")));
 
             services.AddScoped<ITransferHistoryService, TransferHistoryService>();
+            services.AddScoped<IDivisionService, DivisionService>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
