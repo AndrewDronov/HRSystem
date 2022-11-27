@@ -1,10 +1,9 @@
 using System;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 
 namespace HRSystem.Models
 {
-    public partial class TransferHistoryFilter
+    public class TransferHistoryFilter
     {
         [DisplayName("ID сотрудника")]
         public int? EmployeeId { get; set; }
@@ -12,10 +11,12 @@ namespace HRSystem.Models
         public int? DivisionId { get; set; }
         
         [DisplayName("Дата начала")]
-        public DateTime? DateFrom { get; set; }
+        [DefaultValue(true)]
+        public DateTime DateFrom { get; set; }
         
         [DisplayName("Дата окончания")]
-        public DateTime? DateTo { get; set; }
+        [DefaultValue(true)]
+        public DateTime DateTo { get; set; }
         
         [DisplayName("Подразделение")]
         public virtual Division Division { get; set; }

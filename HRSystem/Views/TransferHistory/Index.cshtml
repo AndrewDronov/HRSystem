@@ -44,7 +44,11 @@
                 @Html.DisplayNameForInnerType((TransferHistory p) => p.DivisionId)
             </th>
             <th>
-                @Html.DisplayNameForInnerType((TransferHistory p) => p.CreatedAt)
+                @Html.DisplayNameForInnerType((TransferHistory p) => p.DateFrom)
+            </th>
+            
+            <th>
+                @Html.DisplayNameForInnerType((TransferHistory p) => p.DateTo)
             </th>
         </tr>
     </thead>
@@ -62,7 +66,10 @@
                 @Html.DisplayFor(modelItem => item.DivisionId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
+                @Html.DisplayFor(modelItem => item.DateFrom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateTo)
             </td>
         </tr>
     }

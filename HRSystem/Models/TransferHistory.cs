@@ -14,7 +14,10 @@ namespace HRSystem.Models
         [DisplayName("ID подразделения")]
         public int DivisionId { get; set; }
         [DisplayName("Дата зачисления")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime? DateFrom { get; set; }
+        
+        [DisplayName("Дата отчисления")]
+        public DateTime? DateTo { get; set; }
         
         [DisplayName("Подразделение")]
         public virtual Division Division { get; set; }

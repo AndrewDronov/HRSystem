@@ -91,10 +91,13 @@ namespace HRSystem.Models
                     .HasMaxLength(100)
                     .HasColumnName("division_id");
                 
-                entity.Property(e => e.CreatedAt)
-                    .IsRequired()
+                entity.Property(e => e.DateFrom)
                     .HasMaxLength(100)
-                    .HasColumnName("created_at");
+                    .HasColumnName("date_from");
+                
+                entity.Property(e => e.DateTo)
+                    .HasMaxLength(100)
+                    .HasColumnName("date_to");
                 
                 entity.HasOne(d => d.Employee)
                     .WithMany()

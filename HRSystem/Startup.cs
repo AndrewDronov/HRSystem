@@ -1,4 +1,6 @@
 using HRSystem.Models;
+using HRSystem.Services.Implementations;
+using HRSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +27,8 @@ namespace HRSystem
             
             services.AddDbContext<HrSystem>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("HrSystem")));
+
+            services.AddScoped<ITransferHistoryService, TransferHistoryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
