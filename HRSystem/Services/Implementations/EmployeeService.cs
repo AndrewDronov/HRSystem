@@ -34,9 +34,9 @@ namespace HRSystem.Services.Implementations
 
         public async Task CreateAsync(Employee employee)
         {
-            await _transferHistoryService.TrackTransferAsync(null, employee);
             _context.Add(employee);
             await _context.SaveChangesAsync();
+            await _transferHistoryService.TrackTransferAsync(null, employee);
         }
 
         public async Task UpdateAsync(Employee employee)
