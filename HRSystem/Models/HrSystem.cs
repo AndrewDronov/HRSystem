@@ -40,6 +40,10 @@ namespace HRSystem.Models
 
                 entity.Property(e => e.ParentId).HasColumnName("parent_id");
                 
+                entity.Property(e => e.CreatedAt)
+                    .HasMaxLength(100)
+                    .HasColumnName("created_at").HasDefaultValueSql("CONVERT(Char(16), getdate() ,20)");
+                
                 entity.HasOne(d => d.Parent)
                     .WithMany(p => p.Children)
                     .HasForeignKey(d => d.ParentId)

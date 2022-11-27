@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using HRSystem.Models;
 using HRSystem.Services.Interfaces;
+using HRSystem.ViewModels;
 
 namespace HRSystem.Controllers
 {
@@ -14,11 +15,12 @@ namespace HRSystem.Controllers
         {
             _divisionService = divisionService;
         }
-
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        
+        public async Task<IActionResult> Index([FromForm] DivisionViewModel model)
         {
-            return View(await _divisionService.GetListAsync());
+            model.Data = await _divisionService.GetListAsync(model.Filter);
+            
+            return View(model);
         }
 
         [HttpGet]

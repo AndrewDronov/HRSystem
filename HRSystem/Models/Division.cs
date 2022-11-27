@@ -20,6 +20,8 @@ namespace HRSystem.Models
         public int? ParentId { get; set; }
         [DisplayName("Родительское подразделение")]
         public virtual Division Parent { get; set; }
+        [DisplayName("Дата создания")]
+        public DateTime? CreatedAt { get; set; }
 
         [DisplayName("Дочерние подразделения")]
         public virtual ICollection<Division> Children { get; set; }

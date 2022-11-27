@@ -1,4 +1,5 @@
 
+using HRSystem.Filters;
 using HRSystem.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace HRSystem.Services.Interfaces
     {
         public Task<Division> GetByIdAsync(int divisionId);
         
-        public Task<List<Division>> GetListAsync();
+        public Task<List<Division>> GetListAsync(DivisionFilter filter = null);
 
         public Task CreateAsync(Division division);
         

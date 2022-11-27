@@ -26,7 +26,7 @@ namespace HRSystem
             services.AddControllersWithViews();
             
             services.AddDbContext<HrSystem>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("HrSystem")));
+                options.UseSqlServer(Configuration.GetConnectionString("HrSystem")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
             services.AddScoped<ITransferHistoryService, TransferHistoryService>();
             services.AddScoped<IDivisionService, DivisionService>();

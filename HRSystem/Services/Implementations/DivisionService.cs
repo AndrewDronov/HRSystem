@@ -1,7 +1,10 @@
+using HRSystem.Filters;
 using HRSystem.Models;
 using HRSystem.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HRSystem.Services.Implementations
@@ -22,9 +25,16 @@ namespace HRSystem.Services.Implementations
                 .FirstOrDefaultAsync(m => m.DivisionId == divisionId);
         }
 
-        public async Task<List<Division>> GetListAsync()
+        public async Task<List<Division>> GetListAsync(DivisionFilter filter = null)
         {
-            return await _context.Divisions.Include(d => d.Parent).ToListAsync();
+            var query = _context.Divisions.AsQueryable();
+
+            if (filter?.CreatedAt != null)
+            {
+                query = query.Where(d => d.CreatedAt == filter.CreatedAt);
+            }
+
+            return await query.Include(d => d.Parent).ToListAsync();
         }
 
         public async Task CreateAsync(Division division)

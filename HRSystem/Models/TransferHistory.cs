@@ -13,10 +13,10 @@ namespace HRSystem.Models
         public int EmployeeId { get; set; }
         [DisplayName("ID подразделения")]
         public int DivisionId { get; set; }
-        [DisplayName("Дата зачисления")]
+        [DisplayName("Дата начала")]
         public DateTime? DateFrom { get; set; }
         
-        [DisplayName("Дата отчисления")]
+        [DisplayName("Дата окончания")]
         public DateTime? DateTo { get; set; }
         
         [DisplayName("Подразделение")]

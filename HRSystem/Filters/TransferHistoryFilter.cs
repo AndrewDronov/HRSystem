@@ -1,7 +1,8 @@
+using HRSystem.Models;
 using System;
 using System.ComponentModel;
 
-namespace HRSystem.Models
+namespace HRSystem.Filters
 {
     public class TransferHistoryFilter
     {
